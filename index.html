@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>penchiller — Songwriting Services | AirGigs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–ink: #0d0d0d;
+–cream: #f5f0e8;
+–gold: #c9a84c;
+–gold-light: #e8c96b;
+–rust: #b84a2e;
+–sage: #4a6741;
+–warm-white: #faf8f3;
+–muted: #7a7168;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–cream);
+color: var(–ink);
+font-family: ‘DM Sans’, sans-serif;
+font-weight: 300;
+overflow-x: hidden;
+}
+
+/* NOISE TEXTURE OVERLAY */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 9999;
+opacity: 0.6;
+}
+
+/* HERO */
+.hero {
+min-height: 100vh;
+display: grid;
+grid-template-columns: 1fr 1fr;
+position: relative;
+overflow: hidden;
+}
+
+.hero-left {
+background: var(–ink);
+padding: 60px 56px 60px 72px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+position: relative;
+overflow: hidden;
+}
+
+.hero-left::after {
+content: ‘’;
+position: absolute;
+bottom: -80px;
+right: -80px;
+width: 320px;
+height: 320px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%);
+animation: pulse 6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+0%, 100% { transform: scale(1); opacity: 0.6; }
+50% { transform: scale(1.15); opacity: 1; }
+}
+
+.badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: rgba(201,168,76,0.12);
+border: 1px solid rgba(201,168,76,0.35);
+color: var(–gold-light);
+font-size: 11px;
+letter-spacing: 2.5px;
+text-transform: uppercase;
+padding: 8px 16px;
+width: fit-content;
+font-weight: 500;
+}
+
+.badge::before {
+content: ‘’;
+width: 6px;
+height: 6px;
+border-radius: 50%;
+background: var(–gold);
+animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.3; }
+}
+
+.hero-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(52px, 7vw, 92px);
+line-height: 0.92;
+color: var(–cream);
+font-weight: 900;
+letter-spacing: -2px;
+}
+
+.hero-title em {
+font-style: italic;
+color: var(–gold);
+}
+
+.hero-subtitle {
+font-size: 15px;
+color: rgba(245,240,232,0.55);
+line-height: 1.7;
+max-width: 340px;
+font-weight: 300;
+letter-spacing: 0.2px;
+}
+
+.hero-meta {
+display: flex;
+gap: 32px;
+align-items: flex-end;
+}
+
+.meta-stat {
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+.meta-stat-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 38px;
+color: var(–gold);
+line-height: 1;
+letter-spacing: 1px;
+}
+
+.meta-stat-label {
+font-size: 10px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: rgba(245,240,232,0.4);
+font-weight: 500;
+}
+
+.meta-divider {
+width: 1px;
+height: 40px;
+background: rgba(201,168,76,0.25);
+}
+
+/* HERO RIGHT */
+.hero-right {
+background: var(–warm-white);
+padding: 60px 56px 60px 64px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 28px;
+position: relative;
+}
+
+.hero-right::before {
+content: ‘♪’;
+position: absolute;
+top: -20px;
+right: 60px;
+font-size: 240px;
+color: rgba(201,168,76,0.06);
+font-family: serif;
+pointer-events: none;
+line-height: 1;
+}
+
+.profile-row {
+display: flex;
+align-items: center;
+gap: 16px;
+}
+
+.avatar {
+width: 56px;
+height: 56px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–gold) 0%, var(–rust) 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: ‘Playfair Display’, serif;
+font-size: 22px;
+font-weight: 700;
+color: white;
+flex-shrink: 0;
+position: relative;
+}
+
+.avatar::after {
+content: ‘✓’;
+position: absolute;
+bottom: -2px;
+right: -2px;
+width: 18px;
+height: 18px;
+background: var(–sage);
+border-radius: 50%;
+font-size: 9px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+font-weight: 700;
+border: 2px solid var(–warm-white);
+}
+
+.profile-info h2 {
+font-family: ‘Playfair Display’, serif;
+font-size: 20px;
+font-weight: 700;
+color: var(–ink);
+letter-spacing: -0.3px;
+}
+
+.profile-info p {
+font-size: 12px;
+color: var(–muted);
+letter-spacing: 1.5px;
+text-transform: uppercase;
+font-weight: 500;
+}
+
+.stars {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 13px;
+}
+
+.stars-icons { color: var(–gold); letter-spacing: 1px; }
+.stars-score { font-weight: 500; color: var(–ink); }
+.stars-count { color: var(–muted); font-size: 12px; }
+
+.tagline {
+font-family: ‘Playfair Display’, serif;
+font-size: 26px;
+font-style: italic;
+color: var(–ink);
+line-height: 1.3;
+font-weight: 400;
+border-left: 3px solid var(–gold);
+padding-left: 20px;
+}
+
+.genres-row {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+.genre-tag {
+font-size: 11px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+border: 1px solid rgba(13,13,13,0.18);
+padding: 5px 12px;
+color: var(–muted);
+font-weight: 500;
+transition: all 0.2s;
+cursor: default;
+}
+
+.genre-tag:hover {
+background: var(–ink);
+color: var(–cream);
+border-color: var(–ink);
+}
+
+.cta-group {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.btn-primary {
+background: var(–ink);
+color: var(–cream);
+padding: 14px 32px;
+font-size: 13px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+font-weight: 500;
+border: none;
+cursor: pointer;
+font-family: ‘DM Sans’, sans-serif;
+transition: all 0.25s;
+text-decoration: none;
+display: inline-block;
+}
+
+.btn-primary:hover {
+background: var(–gold);
+color: var(–ink);
+transform: translateY(-1px);
+}
+
+.btn-ghost {
+background: transparent;
+color: var(–ink);
+padding: 14px 24px;
+font-size: 13px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+font-weight: 500;
+border: 1px solid rgba(13,13,13,0.25);
+cursor: pointer;
+font-family: ‘DM Sans’, sans-serif;
+transition: all 0.25s;
+text-decoration: none;
+display: inline-block;
+}
+
+.btn-ghost:hover {
+border-color: var(–ink);
+background: var(–ink);
+color: var(–cream);
+}
+
+/* TICKER */
+.ticker {
+background: var(–gold);
+padding: 11px 0;
+overflow: hidden;
+white-space: nowrap;
+}
+
+.ticker-inner {
+display: inline-block;
+animation: ticker 28s linear infinite;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 14px;
+letter-spacing: 3px;
+color: var(–ink);
+}
+
+@keyframes ticker {
+from { transform: translateX(0); }
+to { transform: translateX(-50%); }
+}
+
+.ticker-sep { margin: 0 24px; opacity: 0.4; }
+
+/* PACKAGES SECTION */
+.section {
+padding: 100px 72px;
+max-width: 1400px;
+margin: 0 auto;
+}
+
+.section-header {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 48px;
+margin-bottom: 64px;
+align-items: end;
+}
+
+.section-label {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 500;
+margin-bottom: 16px;
+}
+
+.section-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(36px, 4vw, 56px);
+font-weight: 900;
+line-height: 1.0;
+letter-spacing: -1.5px;
+}
+
+.section-desc {
+color: var(–muted);
+line-height: 1.8;
+font-size: 15px;
+max-width: 380px;
+align-self: end;
+}
+
+/* PACKAGES GRID */
+.packages-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 2px;
+background: rgba(13,13,13,0.08);
+}
+
+.package-card {
+background: var(–warm-white);
+padding: 44px 36px;
+display: flex;
+flex-direction: column;
+gap: 24px;
+position: relative;
+overflow: hidden;
+transition: transform 0.3s ease;
+}
+
+.package-card:hover {
+transform: translateY(-4px);
+z-index: 2;
+box-shadow: 0 20px 60px rgba(13,13,13,0.12);
+}
+
+.package-card.featured {
+background: var(–ink);
+color: var(–cream);
+}
+
+.package-card.featured::before {
+content: ‘MOST POPULAR’;
+position: absolute;
+top: 20px;
+right: -28px;
+background: var(–gold);
+color: var(–ink);
+font-size: 9px;
+letter-spacing: 2px;
+font-weight: 700;
+padding: 5px 40px;
+transform: rotate(45deg);
+transform-origin: center;
+right: -20px;
+top: 18px;
+}
+
+.package-tier {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+font-weight: 600;
+}
+
+.package-card:not(.featured) .package-tier { color: var(–gold); }
+.package-card.featured .package-tier { color: var(–gold-light); }
+
+.package-name {
+font-family: ‘Playfair Display’, serif;
+font-size: 30px;
+font-weight: 700;
+letter-spacing: -0.5px;
+line-height: 1.1;
+}
+
+.package-price {
+display: flex;
+align-items: baseline;
+gap: 4px;
+}
+
+.price-amount {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 56px;
+line-height: 1;
+letter-spacing: 1px;
+}
+
+.package-card:not(.featured) .price-amount { color: var(–ink); }
+.package-card.featured .price-amount { color: var(–gold); }
+
+.price-from {
+font-size: 12px;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+
+.package-card:not(.featured) .price-from { color: var(–muted); }
+.package-card.featured .price-from { color: rgba(245,240,232,0.5); }
+
+.package-desc {
+font-size: 14px;
+line-height: 1.7;
+}
+
+.package-card:not(.featured) .package-desc { color: var(–muted); }
+.package-card.featured .package-desc { color: rgba(245,240,232,0.65); }
+
+.package-features {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 11px;
+flex: 1;
+}
+
+.package-features li {
+font-size: 13.5px;
+display: flex;
+align-items: flex-start;
+gap: 10px;
+line-height: 1.4;
+}
+
+.package-card:not(.featured) .package-features li { color: var(–ink); }
+.package-card.featured .package-features li { color: rgba(245,240,232,0.85); }
+
+.check {
+flex-shrink: 0;
+width: 18px;
+height: 18px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 9px;
+font-weight: 700;
+margin-top: 1px;
+}
+
+.package-card:not(.featured) .check { background: rgba(74,103,65,0.15); color: var(–sage); }
+.package-card.featured .check { background: rgba(201,168,76,0.2); color: var(–gold-light); }
+
+.delivery-badge {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 12px;
+font-weight: 500;
+padding: 10px 0;
+border-top: 1px solid;
+}
+
+.package-card:not(.featured) .delivery-badge {
+border-color: rgba(13,13,13,0.1);
+color: var(–muted);
+}
+
+.package-card.featured .delivery-badge {
+border-color: rgba(245,240,232,0.15);
+color: rgba(245,240,232,0.5);
+}
+
+.clock-icon { font-size: 14px; }
+
+.package-btn {
+padding: 14px;
+font-size: 12px;
+letter-spacing: 2px;
+text-transform: uppercase;
+font-weight: 600;
+font-family: ‘DM Sans’, sans-serif;
+cursor: pointer;
+border: none;
+transition: all 0.25s;
+text-align: center;
+}
+
+.package-card:not(.featured) .package-btn {
+background: var(–ink);
+color: var(–cream);
+}
+
+.package-card:not(.featured) .package-btn:hover {
+background: var(–gold);
+color: var(–ink);
+}
+
+.package-card.featured .package-btn {
+background: var(–gold);
+color: var(–ink);
+}
+
+.package-card.featured .package-btn:hover {
+background: var(–gold-light);
+}
+
+/* PROCESS SECTION */
+.process-section {
+background: var(–ink);
+padding: 100px 72px;
+}
+
+.process-inner {
+max-width: 1400px;
+margin: 0 auto;
+}
+
+.process-section .section-title { color: var(–cream); }
+.process-section .section-label { color: var(–gold); }
+
+.process-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+margin-top: 64px;
+background: rgba(245,240,232,0.06);
+}
+
+.process-step {
+background: #111;
+padding: 40px 32px;
+position: relative;
+overflow: hidden;
+}
+
+.process-step::before {
+content: ‘’;
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+height: 2px;
+background: var(–gold);
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.4s ease;
+}
+
+.process-step:hover::before { transform: scaleX(1); }
+
+.step-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 72px;
+line-height: 0.85;
+color: rgba(201,168,76,0.12);
+margin-bottom: 24px;
+display: block;
+transition: color 0.3s;
+}
+
+.process-step:hover .step-num { color: rgba(201,168,76,0.25); }
+
+.step-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 20px;
+font-weight: 700;
+color: var(–cream);
+margin-bottom: 12px;
+}
+
+.step-desc {
+font-size: 13.5px;
+color: rgba(245,240,232,0.45);
+line-height: 1.7;
+}
+
+/* ADD-ONS */
+.addons-section {
+padding: 100px 72px;
+max-width: 1400px;
+margin: 0 auto;
+}
+
+.addons-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 2px;
+background: rgba(13,13,13,0.08);
+margin-top: 64px;
+}
+
+.addon-card {
+background: var(–warm-white);
+padding: 32px;
+display: flex;
+gap: 24px;
+align-items: flex-start;
+transition: background 0.3s;
+}
+
+.addon-card:hover { background: #fff; }
+
+.addon-icon {
+font-size: 28px;
+flex-shrink: 0;
+width: 52px;
+height: 52px;
+background: rgba(201,168,76,0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 2px;
+}
+
+.addon-content { flex: 1; }
+
+.addon-name {
+font-family: ‘Playfair Display’, serif;
+font-size: 18px;
+font-weight: 700;
+color: var(–ink);
+margin-bottom: 6px;
+}
+
+.addon-desc {
+font-size: 13.5px;
+color: var(–muted);
+line-height: 1.6;
+margin-bottom: 10px;
+}
+
+.addon-price {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 26px;
+color: var(–gold);
+letter-spacing: 1px;
+}
+
+/* TESTIMONIALS */
+.testimonials-section {
+background: #f0ebe0;
+padding: 100px 72px;
+}
+
+.testimonials-inner { max-width: 1400px; margin: 0 auto; }
+
+.testimonials-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 24px;
+margin-top: 64px;
+}
+
+.testimonial-card {
+background: var(–warm-white);
+padding: 36px;
+position: relative;
+border-bottom: 3px solid transparent;
+transition: border-color 0.3s;
+}
+
+.testimonial-card:hover { border-bottom-color: var(–gold); }
+
+.quote-mark {
+font-family: ‘Playfair Display’, serif;
+font-size: 72px;
+line-height: 0.7;
+color: rgba(201,168,76,0.2);
+margin-bottom: 16px;
+display: block;
+}
+
+.testimonial-text {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: 16px;
+line-height: 1.65;
+color: var(–ink);
+margin-bottom: 24px;
+}
+
+.testimonial-author {
+display: flex;
+align-items: center;
+gap: 12px;
+padding-top: 20px;
+border-top: 1px solid rgba(13,13,13,0.08);
+}
+
+.author-avatar {
+width: 38px;
+height: 38px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 14px;
+font-weight: 700;
+color: white;
+flex-shrink: 0;
+}
+
+.author-name {
+font-size: 13px;
+font-weight: 600;
+color: var(–ink);
+}
+
+.author-detail {
+font-size: 11px;
+color: var(–muted);
+letter-spacing: 0.5px;
+}
+
+/* FAQ */
+.faq-section {
+padding: 100px 72px;
+max-width: 900px;
+margin: 0 auto;
+}
+
+.faq-item {
+border-bottom: 1px solid rgba(13,13,13,0.12);
+padding: 28px 0;
+}
+
+.faq-q {
+font-family: ‘Playfair Display’, serif;
+font-size: 19px;
+font-weight: 600;
+color: var(–ink);
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+user-select: none;
+transition: color 0.2s;
+}
+
+.faq-q:hover { color: var(–gold); }
+
+.faq-q::after {
+content: ‘+’;
+font-size: 24px;
+font-weight: 300;
+flex-shrink: 0;
+transition: transform 0.3s;
+font-family: ‘DM Sans’, sans-serif;
+}
+
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+
+.faq-a {
+font-size: 14.5px;
+color: var(–muted);
+line-height: 1.8;
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.4s ease, margin-top 0.3s;
+}
+
+.faq-item.open .faq-a {
+max-height: 200px;
+margin-top: 16px;
+}
+
+/* CTA STRIP */
+.cta-strip {
+background: var(–ink);
+padding: 80px 72px;
+display: grid;
+grid-template-columns: 1fr auto;
+align-items: center;
+gap: 48px;
+}
+
+.cta-strip h2 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(32px, 4vw, 52px);
+font-weight: 900;
+color: var(–cream);
+line-height: 1.0;
+letter-spacing: -1px;
+}
+
+.cta-strip h2 em { color: var(–gold); font-style: italic; }
+
+.cta-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* FOOTER */
+footer {
+background: #080808;
+padding: 40px 72px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 16px;
+}
+
+.footer-brand {
+font-family: ‘Playfair Display’, serif;
+font-size: 18px;
+color: var(–cream);
+font-weight: 700;
+letter-spacing: -0.3px;
+}
+
+.footer-brand span { color: var(–gold); }
+
+.footer-copy {
+font-size: 12px;
+color: rgba(245,240,232,0.3);
+letter-spacing: 0.5px;
+}
+
+.footer-link {
+font-size: 12px;
+color: var(–gold);
+letter-spacing: 1.5px;
+text-transform: uppercase;
+text-decoration: none;
+font-weight: 500;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-left > * {
+animation: fadeUp 0.7s ease both;
+}
+
+.hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-left > *:nth-child(2) { animation-delay: 0.25s; }
+.hero-left > *:nth-child(3) { animation-delay: 0.4s; }
+.hero-left > *:nth-child(4) { animation-delay: 0.55s; }
+
+/* MOBILE */
+@media (max-width: 900px) {
+.hero { grid-template-columns: 1fr; min-height: auto; }
+.hero-left { padding: 48px 32px; min-height: 60vh; }
+.hero-right { padding: 48px 32px; }
+.section { padding: 64px 32px; }
+.section-header { grid-template-columns: 1fr; gap: 20px; }
+.packages-grid { grid-template-columns: 1fr; }
+.process-grid { grid-template-columns: repeat(2, 1fr); }
+.testimonials-grid { grid-template-columns: 1fr; }
+.addons-grid { grid-template-columns: 1fr; }
+.cta-strip { grid-template-columns: 1fr; padding: 64px 32px; }
+.process-section { padding: 64px 32px; }
+.testimonials-section { padding: 64px 32px; }
+footer { padding: 32px; flex-direction: column; text-align: center; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="badge">Available for Hire · AirGigs Verified</div>
+
+```
+<div>
+  <h1 class="hero-title">
+    Songs<br>
+    That <em>Sell.</em><br>
+    Stories<br>
+    That <em>Stay.</em>
+  </h1>
+</div>
+
+<p class="hero-subtitle">
+  Professional songwriting crafted to move hearts, stream millions, and build your catalog. From hooks to full productions — every word earns its place.
+</p>
+
+<div class="hero-meta">
+  <div class="meta-stat">
+    <span class="meta-stat-num">500+</span>
+    <span class="meta-stat-label">Songs Delivered</span>
+  </div>
+  <div class="meta-divider"></div>
+  <div class="meta-stat">
+    <span class="meta-stat-num">98%</span>
+    <span class="meta-stat-label">Client Satisfaction</span>
+  </div>
+  <div class="meta-divider"></div>
+  <div class="meta-stat">
+    <span class="meta-stat-num">12+</span>
+    <span class="meta-stat-label">Genres Served</span>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="hero-right">
+    <div class="profile-row">
+      <div class="avatar">P</div>
+      <div class="profile-info">
+        <h2>penchiller</h2>
+        <p>Pro Songwriter · Lyricist · Ghostwriter</p>
+      </div>
+    </div>
+
+```
+<div class="stars">
+  <span class="stars-icons">★★★★★</span>
+  <span class="stars-score">5.0</span>
+  <span class="stars-count">(127 reviews)</span>
+</div>
+
+<p class="tagline">"I don't just write lyrics — I write the song your audience didn't know they needed."</p>
+
+<div class="genres-row">
+  <span class="genre-tag">Pop</span>
+  <span class="genre-tag">R&amp;B</span>
+  <span class="genre-tag">Hip-Hop</span>
+  <span class="genre-tag">Country</span>
+  <span class="genre-tag">Gospel</span>
+  <span class="genre-tag">Soul</span>
+  <span class="genre-tag">EDM</span>
+  <span class="genre-tag">Afrobeats</span>
+  <span class="genre-tag">Folk</span>
+  <span class="genre-tag">Rock</span>
+</div>
+
+<div class="cta-group">
+  <a href="#packages" class="btn-primary">View Packages</a>
+  <a href="#process" class="btn-ghost">How It Works</a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- TICKER -->
+
+<div class="ticker">
+  <div class="ticker-inner">
+    ORIGINAL LYRICS &nbsp;<span class="ticker-sep">·</span>&nbsp; FULL SONG STRUCTURE &nbsp;<span class="ticker-sep">·</span>&nbsp; GHOSTWRITING AVAILABLE &nbsp;<span class="ticker-sep">·</span>&nbsp; 100% OWNERSHIP TRANSFER &nbsp;<span class="ticker-sep">·</span>&nbsp; UNLIMITED REVISIONS &nbsp;<span class="ticker-sep">·</span>&nbsp; SYNC &amp; COMMERCIAL READY &nbsp;<span class="ticker-sep">·</span>&nbsp; ORIGINAL LYRICS &nbsp;<span class="ticker-sep">·</span>&nbsp; FULL SONG STRUCTURE &nbsp;<span class="ticker-sep">·</span>&nbsp; GHOSTWRITING AVAILABLE &nbsp;<span class="ticker-sep">·</span>&nbsp; 100% OWNERSHIP TRANSFER &nbsp;<span class="ticker-sep">·</span>&nbsp; UNLIMITED REVISIONS &nbsp;<span class="ticker-sep">·</span>&nbsp; SYNC &amp; COMMERCIAL READY &nbsp;<span class="ticker-sep">·</span>&nbsp;
+  </div>
+</div>
+
+<!-- PACKAGES -->
+
+<div id="packages" style="background: var(--cream);">
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-label">Services &amp; Pricing</p>
+        <h2 class="section-title">Choose Your<br>Package</h2>
+      </div>
+      <p class="section-desc">Every package includes a dedicated consultation, original composition, and full rights transfer. Scale up for more depth, speed, and creative input.</p>
+    </div>
+
+```
+<div class="packages-grid">
+  <!-- STARTER -->
+  <div class="package-card">
+    <p class="package-tier">Starter</p>
+    <h3 class="package-name">The Seed</h3>
+    <div class="package-price">
+      <span class="price-from">From</span>
+      <span class="price-amount">$75</span>
+    </div>
+    <p class="package-desc">Perfect for demos, single hooks, or dipping your toes into a collaboration. Clean, punchy songwriting with your vision at the center.</p>
+    <ul class="package-features">
+      <li><span class="check">✓</span> 1 Original song (lyrics + structure)</li>
+      <li><span class="check">✓</span> Verse + Chorus + Bridge</li>
+      <li><span class="check">✓</span> 1 revision included</li>
+      <li><span class="check">✓</span> Full copyright transfer</li>
+      <li><span class="check">✓</span> Reference track brief</li>
+    </ul>
+    <div class="delivery-badge">
+      <span class="clock-icon">⏱</span>
+      <span>Delivery in 3–5 days</span>
+    </div>
+    <button class="package-btn">Order The Seed</button>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="package-card featured">
+    <p class="package-tier">Most Loved</p>
+    <h3 class="package-name">The Anthem</h3>
+    <div class="package-price">
+      <span class="price-from">From</span>
+      <span class="price-amount">$175</span>
+    </div>
+    <p class="package-desc">Full commercial-ready songwriting with depth, emotion, and a hook that doesn't let go. Ideal for releases, pitches, and sync licensing.</p>
+    <ul class="package-features">
+      <li><span class="check">✓</span> Complete original song (all sections)</li>
+      <li><span class="check">✓</span> Intro + 2 Verses + Pre-chorus + Hook</li>
+      <li><span class="check">✓</span> Outro &amp; ad-lib variations</li>
+      <li><span class="check">✓</span> 3 revisions included</li>
+      <li><span class="check">✓</span> Concept development call</li>
+      <li><span class="check">✓</span> Topline melody guide</li>
+      <li><span class="check">✓</span> Full copyright transfer</li>
+    </ul>
+    <div class="delivery-badge">
+      <span class="clock-icon">⏱</span>
+      <span>Delivery in 4–6 days</span>
+    </div>
+    <button class="package-btn">Order The Anthem</button>
+  </div>
+
+  <!-- PREMIUM -->
+  <div class="package-card">
+    <p class="package-tier">Premium</p>
+    <h3 class="package-name">The Legacy</h3>
+    <div class="package-price">
+      <span class="price-from">From</span>
+      <span class="price-amount">$350</span>
+    </div>
+    <p class="package-desc">White-glove songwriting experience for artists, labels, and publishers who need catalog-quality material. Zero compromise.</p>
+    <ul class="package-features">
+      <li><span class="check">✓</span> Full EP-ready song package (2 songs)</li>
+      <li><span class="check">✓</span> Deep concept development</li>
+      <li><span class="check">✓</span> Unlimited revisions</li>
+      <li><span class="check">✓</span> Topline melodies + vocal directions</li>
+      <li><span class="check">✓</span> Co-write credit option</li>
+      <li><span class="check">✓</span> PRO registration guidance</li>
+      <li><span class="check">✓</span> Priority 48-hr support</li>
+    </ul>
+    <div class="delivery-badge">
+      <span class="clock-icon">⏱</span>
+      <span>Delivery in 7–10 days</span>
+    </div>
+    <button class="package-btn">Order The Legacy</button>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- PROCESS -->
+
+<section id="process" class="process-section">
+  <div class="process-inner">
+    <div class="section-header" style="margin-bottom: 0;">
+      <div>
+        <p class="section-label">The Process</p>
+        <h2 class="section-title" style="color: var(--cream);">How We<br>Make Magic</h2>
+      </div>
+      <p class="section-desc" style="color: rgba(245,240,232,0.45);">A clear, collaborative workflow so you always know where your song stands and what comes next.</p>
+    </div>
+
+```
+<div class="process-grid">
+  <div class="process-step">
+    <span class="step-num">01</span>
+    <h3 class="step-title">Brief &amp; Vision</h3>
+    <p class="step-desc">You fill out a creative brief or we hop on a quick chat. I learn your story, target feel, genre, and references so nothing gets lost in translation.</p>
+  </div>
+  <div class="process-step">
+    <span class="step-num">02</span>
+    <h3 class="step-title">First Draft</h3>
+    <p class="step-desc">I write your first complete draft — lyrics, structure, and optional topline notation — grounded in your brief and my instinct for what lands.</p>
+  </div>
+  <div class="process-step">
+    <span class="step-num">03</span>
+    <h3 class="step-title">Refine &amp; Polish</h3>
+    <p class="step-desc">You give feedback. We revise until every word sings. Depending on your package, we can go deep — tweaking flow, syllables, imagery, and emotion.</p>
+  </div>
+  <div class="process-step">
+    <span class="step-num">04</span>
+    <h3 class="step-title">Deliver &amp; Own</h3>
+    <p class="step-desc">Final files delivered — lyrics, notes, and a signed rights release. The song is 100% yours to record, publish, pitch, and profit from.</p>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+
+<section class="addons-section">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Extras &amp; Upgrades</p>
+      <h2 class="section-title">Power Up<br>Your Order</h2>
+    </div>
+    <p class="section-desc">Add these to any package to get exactly what your project needs — no guesswork, no hidden costs.</p>
+  </div>
+
+  <div class="addons-grid">
+    <div class="addon-card">
+      <div class="addon-icon">⚡</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Rush Delivery</h4>
+        <p class="addon-desc">Need it yesterday? Rush turnaround gets your first draft in 24–48 hours without cutting corners on quality.</p>
+        <span class="addon-price">+$40</span>
+      </div>
+    </div>
+    <div class="addon-card">
+      <div class="addon-icon">🎙️</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Vocal Reference Demo</h4>
+        <p class="addon-desc">A rough vocal guide recorded over your beat or a reference track so you hear the melody, not just read it.</p>
+        <span class="addon-price">+$60</span>
+      </div>
+    </div>
+    <div class="addon-card">
+      <div class="addon-icon">📦</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Extra Song</h4>
+        <p class="addon-desc">Add a second full song to any package at a bundled rate. Perfect for singles backed with a B-side.</p>
+        <span class="addon-price">+$80</span>
+      </div>
+    </div>
+    <div class="addon-card">
+      <div class="addon-icon">🔐</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Ghostwrite (No Credit)</h4>
+        <p class="addon-desc">Want full secrecy? I waive all writing credits, sign an NDA, and the song is invisibly and entirely yours.</p>
+        <span class="addon-price">+$50</span>
+      </div>
+    </div>
+    <div class="addon-card">
+      <div class="addon-icon">📝</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Song Concept Package</h4>
+        <p class="addon-desc">Before a word is written, get a detailed creative brief: title options, emotional arc, story concept, and lyrical direction map.</p>
+        <span class="addon-price">+$35</span>
+      </div>
+    </div>
+    <div class="addon-card">
+      <div class="addon-icon">🌍</div>
+      <div class="addon-content">
+        <h4 class="addon-name">Translation / Bilingual Lyrics</h4>
+        <p class="addon-desc">Spanish, French, or Portuguese adaptation of your original lyrics — keeping the rhyme scheme and emotion intact.</p>
+        <span class="addon-price">+$55</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="section-header">
+      <div>
+        <p class="section-label">Client Love</p>
+        <h2 class="section-title">What Artists<br>Are Saying</h2>
+      </div>
+      <p class="section-desc">Real words from real artists who've released, streamed, and celebrated songs born from this collaboration.</p>
+    </div>
+
+```
+<div class="testimonials-grid">
+  <div class="testimonial-card">
+    <span class="quote-mark">"</span>
+    <p class="testimonial-text">penchiller nailed my concept on the very first draft. The hook was exactly what I heard in my head but couldn't put into words. Now it has 200K streams.</p>
+    <div class="testimonial-author">
+      <div class="author-avatar" style="background: linear-gradient(135deg, #c9a84c, #b84a2e);">J</div>
+      <div>
+        <p class="author-name">Jordan M.</p>
+        <p class="author-detail">R&amp;B Artist · Atlanta, GA</p>
+      </div>
+    </div>
+  </div>
+  <div class="testimonial-card">
+    <span class="quote-mark">"</span>
+    <p class="testimonial-text">I've worked with a lot of writers online. This is the only one I come back to every single project. The storytelling is on another level.</p>
+    <div class="testimonial-author">
+      <div class="author-avatar" style="background: linear-gradient(135deg, #4a6741, #2e5c6e);">T</div>
+      <div>
+        <p class="author-name">Talia R.</p>
+        <p class="author-detail">Country Singer-Songwriter · Nashville</p>
+      </div>
+    </div>
+  </div>
+  <div class="testimonial-card">
+    <span class="quote-mark">"</span>
+    <p class="testimonial-text">Ordered The Anthem on a Monday. By Friday I was in studio. Revisions were fast, communication was clear. Absolute pro. Will be back.</p>
+    <div class="testimonial-author">
+      <div class="author-avatar" style="background: linear-gradient(135deg, #2e2e5c, #5c2e4a);">D</div>
+      <div>
+        <p class="author-name">DeeNote</p>
+        <p class="author-detail">Hip-Hop Producer · Houston, TX</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<div style="background: var(--cream);">
+  <section class="faq-section">
+    <p class="section-label" style="margin-bottom: 12px;">Got Questions?</p>
+    <h2 class="section-title" style="margin-bottom: 48px; letter-spacing: -1.5px;">Common<br>Questions</h2>
+
+```
+<div class="faq-item open">
+  <p class="faq-q">Do I own the song after purchase?</p>
+  <p class="faq-a">Yes — 100% of the creative rights transfer to you upon delivery and final payment. I provide a written rights release with every order. You can record, release, publish, and monetize without restriction.</p>
+</div>
+<div class="faq-item">
+  <p class="faq-q">Can I request a specific style, genre, or vibe?</p>
+  <p class="faq-a">Absolutely. That's exactly what the creative brief is for. I write across Pop, R&B, Hip-Hop, Gospel, Country, EDM, Soul, Afrobeats, Folk, and more. Share references, moods, or a concept — I'll make it fit.</p>
+</div>
+<div class="faq-item">
+  <p class="faq-q">What if I don't like the first draft?</p>
+  <p class="faq-a">Every package includes revisions — 1 with The Seed, 3 with The Anthem, and unlimited with The Legacy. If something doesn't feel right, just explain what's off and I'll rework it until you love it.</p>
+</div>
+<div class="faq-item">
+  <p class="faq-q">Do you offer ghostwriting where you won't be credited?</p>
+  <p class="faq-a">Yes. Add the Ghostwrite add-on to any package. I'll sign an NDA and waive all writing credits. Everything stays confidential — the world will only know it as yours.</p>
+</div>
+<div class="faq-item">
+  <p class="faq-q">Can you write to an existing beat or instrumental?</p>
+  <p class="faq-a">Of course. Send me the file and I'll write directly to the track — matching the energy, tempo, and emotional pocket of your production.</p>
+</div>
+```
+
+  </section>
+</div>
+
+<!-- CTA STRIP -->
+
+<div class="cta-strip">
+  <h2>Ready to write<br>your next <em>hit?</em></h2>
+  <div class="cta-buttons">
+    <a href="#packages" class="btn-primary" style="background: var(--gold); color: var(--ink);">Start My Order</a>
+    <a href="#" class="btn-ghost" style="color: var(--cream); border-color: rgba(245,240,232,0.25);">Send a Message</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-brand">pen<span>chiller</span></div>
+  <p class="footer-copy">© 2025 penchiller · All songs delivered as original works · AirGigs Platform</p>
+  <a href="#packages" class="footer-link">View Services ↑</a>
+</footer>
+
+<script>
+  // FAQ Toggle
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Smooth scroll for anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  // Subtle scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.package-card, .process-step, .addon-card, .testimonial-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
